@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Pokedex.module.css';
 import { PokemonWindow, PokemonWindowControls, getRandomPokemonId } from '../QuemEhPokemon/pokedexCover';
 
@@ -10,6 +10,16 @@ export default function Pokedex({ toggleView }: PokedexProps ) {
   const [isPokedexOpen, setPokedexOpen] = useState(false);
   const [showPokemonWindow, setShowPokemonWindow] = useState(false);
   const [randomPokemonId, setRandomPokemonId] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loadData = async () => {
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const handleClick = () => {
     setPokedexOpen(!isPokedexOpen);
@@ -21,7 +31,9 @@ export default function Pokedex({ toggleView }: PokedexProps ) {
   };
 
   const handleContinue = () => {
-    console.log("Mostrar de novo")
+    setIsLoading(true);
+    setRandomPokemonId(getRandomPokemonId());
+    loadData();
   };
   
   return (
@@ -50,8 +62,11 @@ export default function Pokedex({ toggleView }: PokedexProps ) {
                     </div>
                   )}
 
-                  { showPokemonWindow &&  <PokemonWindow pokemonId={randomPokemonId}/> }
-
+                  {isLoading && showPokemonWindow ? 
+                    <span>Loading...</span>
+                  : 
+                    showPokemonWindow &&  <PokemonWindow pokemonId={randomPokemonId}/> 
+                  }
                 </div>
                 <div className={styles.poke_content_leds2}>
                   <div className={styles.leds_red}></div>
@@ -90,15 +105,13 @@ export default function Pokedex({ toggleView }: PokedexProps ) {
               </div>}
 
               <div>
-                {
-                showPokemonWindow && 
+                {showPokemonWindow && 
                   <PokemonWindowControls 
                     pokemonId={randomPokemonId} 
                     onBackClick={handleClickPoke}
                     onContinueClick={handleContinue}
                   /> 
                 }
-
               </div> 
                     
             </div>

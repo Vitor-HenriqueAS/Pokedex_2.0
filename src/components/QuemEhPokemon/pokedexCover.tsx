@@ -3,7 +3,6 @@ import Pokemon from "../types/pokemon-model";
 import { fetchPokemon } from "../PokemonList/poke-api";
 import styles from "./QuemEhPokemon.module.css";
 import Image from 'next/image';
-import axios from "axios";
 import ResultWindow from '@/components/ResultWindow';
 
 interface PokemonIdProps {
@@ -46,7 +45,7 @@ export const PokemonWindow: React.FC<PokemonIdProps> = ({ pokemonId }) => {
       <Image 
         src={pokemon.photo}
         alt='Quem é esse Pokemon?' 
-        title={pokemonId.toString()} 
+        title='Quem é esse Pokemon?' 
         width={150} height={150} 
         priority={true} 
       />
@@ -57,11 +56,24 @@ export const PokemonWindow: React.FC<PokemonIdProps> = ({ pokemonId }) => {
 export const PokemonWindowControls: React.FC<PokemonWindowControlsProps> = (
   { pokemonId, onBackClick, onContinueClick }) => {
   
-  const [randomPokemonData, setRandomPokemonData] = useState<{ id: number, name: string, photo: string }[]>([]);
-  const [resultActive, setresultActive] = React.useState([
+  const [randomPokemonData, setRandomPokemonData] = useState<{ id: number, name: string }[]>([]);
+  const [scorePokemon, setScorePokemon] = useState(0);
+  const [recordPokemon , setRecordPokemon] = useState(0);
+  const [resultActive, setResultActive] = React.useState([
     {resultActiveWindow: false, result:false,  resultName: ''}
   ]);
   const matrizResult = [...resultActive]
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loadData = async () => {
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setIsLoading(false);
+  };
+
+  function showLoader() {
+    setIsLoading(true);
+    loadData();
+  }
 
   useEffect(() => {
     const getRandomPokemonData = async () => {
@@ -79,7 +91,7 @@ export const PokemonWindowControls: React.FC<PokemonWindowControlsProps> = (
         const randomPokemon = allPokemon.slice(0, 3);
         const correctNameIndex = Math.floor(Math.random() * 4);
 
-         const pokemonData: { id: number, name: string, photo: string}[] = await Promise.all(
+         const pokemonData: { id: number, name: string}[] = await Promise.all(
           randomPokemon.map(async (pokemon: any) => {
             const id = await getPokemonIdFromUrl(pokemon.url);
             return { id, name: pokemon.name };
@@ -88,8 +100,7 @@ export const PokemonWindowControls: React.FC<PokemonWindowControlsProps> = (
 
         pokemonData.splice(correctNameIndex, 0, {
           id: await getPokemonIdFromUrl(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`),
-          name: await getPokemonNameById(pokemonId),
-          photo: await getPokemonImgFromUrl(pokemonId)
+          name: await getPokemonNameById(pokemonId)
         });
 
         setRandomPokemonData(pokemonData);
@@ -108,17 +119,6 @@ export const PokemonWindowControls: React.FC<PokemonWindowControlsProps> = (
         return 0;
       }
     };
-
-    const getPokemonImgFromUrl = async (pokemonId: number): Promise<string> => {
-      try {        
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon-form/${pokemonId}`);
-        const data = await response.data;
-        return data.sprites.front_default;
-      } catch (error) {
-        console.error(`Falha ao buscar imagem do Pokémon ${pokemonId}`, error);
-        return "Imagem não Encontrada";
-      }
-  };
 
   const getPokemonNameById = async (pokemonId: number): Promise<string> => {
     try { 
@@ -141,12 +141,15 @@ export const PokemonWindowControls: React.FC<PokemonWindowControlsProps> = (
         matrizResult[0].resultActiveWindow = true
         matrizResult[0].result = true
         matrizResult[0].resultName = nomePokemon
-        setresultActive(matrizResult)
+        setScorePokemon(scorePokemon+1)
+        scorePokemon+1 > recordPokemon ? setRecordPokemon(scorePokemon+1) : setRecordPokemon(recordPokemon)
+        setResultActive(matrizResult)
       } else {
         matrizResult[0].resultActiveWindow = true
         matrizResult[0].result = false
         matrizResult[0].resultName = nomePokemon
-        setresultActive(matrizResult)
+        setScorePokemon(0)
+        setResultActive(matrizResult)
       }
     };
 
@@ -157,9 +160,15 @@ export const PokemonWindowControls: React.FC<PokemonWindowControlsProps> = (
           break;
         case "continuar":
           onContinueClick();
+          showLoader();
+          matrizResult[0].resultActiveWindow = false
+          setResultActive(matrizResult)
           break;
         case "restart":
           onContinueClick();
+          showLoader();
+          matrizResult[0].resultActiveWindow = false
+          setResultActive(matrizResult)
           break;
         default:
           console.log("Erro!")
@@ -170,9 +179,16 @@ export const PokemonWindowControls: React.FC<PokemonWindowControlsProps> = (
     return (
       <div className={styles.poke_window_quemehpoke}>
         
-        {resultActive[0].resultActiveWindow ?
+        <div className={styles.score_pokemon}>
+          <h4>Pontuação : {scorePokemon}</h4>
+          <h6>Recorde : {recordPokemon}</h6>
+        </div>
+
+        { isLoading ? <div>Loading...</div> :
+        
+        resultActive[0].resultActiveWindow ?
           <ResultWindow 
-            key={resultActive[0].resultName}
+            key={resultActive[0].resultName + scorePokemon}
             result={resultActive[0].result}
             resultNameWin={resultActive[0].resultName}
             onButtonClick={buttonAction}
