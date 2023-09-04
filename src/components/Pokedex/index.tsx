@@ -19,6 +19,10 @@ export default function Pokedex({ toggleView }: PokedexProps ) {
     setShowPokemonWindow(!showPokemonWindow);
     setRandomPokemonId(getRandomPokemonId());
   };
+
+  const handleContinue = () => {
+    console.log("Mostrar de novo")
+  };
   
   return (
     <div className={styles.poke_body}>
@@ -46,7 +50,7 @@ export default function Pokedex({ toggleView }: PokedexProps ) {
                     </div>
                   )}
 
-                  {showPokemonWindow && <PokemonWindow pokemonId={randomPokemonId} />}
+                  { showPokemonWindow &&  <PokemonWindow pokemonId={randomPokemonId}/> }
 
                 </div>
                 <div className={styles.poke_content_leds2}>
@@ -86,17 +90,16 @@ export default function Pokedex({ toggleView }: PokedexProps ) {
               </div>}
 
               <div>
-                {showPokemonWindow && 
-                <button
-                  type="button"
-                  className={styles.btn_voltar}
-                  onClick={handleClickPoke}
-                >
-                  ◀
-                  Voltar
-                </button>}
-                  {showPokemonWindow && <PokemonWindowControls pokemonId={randomPokemonId} />}
-              </div>
+                {
+                showPokemonWindow && 
+                  <PokemonWindowControls 
+                    pokemonId={randomPokemonId} 
+                    onBackClick={handleClickPoke}
+                    onContinueClick={handleContinue}
+                  /> 
+                }
+
+              </div> 
                     
             </div>
           </div>

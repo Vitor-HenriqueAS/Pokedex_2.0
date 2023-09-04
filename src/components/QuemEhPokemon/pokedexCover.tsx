@@ -4,9 +4,15 @@ import { fetchPokemon } from "../PokemonList/poke-api";
 import styles from "./QuemEhPokemon.module.css";
 import Image from 'next/image';
 import axios from "axios";
+import ResultWindow from '@/components/ResultWindow';
 
 interface PokemonIdProps {
   pokemonId: number;
+}
+
+interface PokemonWindowControlsProps extends PokemonIdProps{
+  onBackClick: () => void;
+  onContinueClick: () => void;
 }
 
 //Pokemon aleatorio
@@ -48,14 +54,18 @@ export const PokemonWindow: React.FC<PokemonIdProps> = ({ pokemonId }) => {
   );
 };
 
-export const PokemonWindowControls: React.FC<PokemonIdProps> = ({ pokemonId }) => {
+export const PokemonWindowControls: React.FC<PokemonWindowControlsProps> = (
+  { pokemonId, onBackClick, onContinueClick }) => {
   
   const [randomPokemonData, setRandomPokemonData] = useState<{ id: number, name: string, photo: string }[]>([]);
-  
+  const [resultActive, setresultActive] = React.useState([
+    {resultActiveWindow: false, result:false,  resultName: ''}
+  ]);
+  const matrizResult = [...resultActive]
+
   useEffect(() => {
     const getRandomPokemonData = async () => {
       try {
-
         const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=600');
         const data = await response.json();
         const allPokemon = data.results;
@@ -126,27 +136,59 @@ export const PokemonWindowControls: React.FC<PokemonIdProps> = ({ pokemonId }) =
 
 
   //Função para lidar com o clique do botão
-    const handleButtonClick = (id: number, nomePokemon: string, imagemPokemon: string) => {
+    const handleButtonClick = (id: number, nomePokemon: string) => {
       if (id === pokemonId) {
-        alert("Acertou | " + nomePokemon);
-        console.log(imagemPokemon);
+        matrizResult[0].resultActiveWindow = true
+        matrizResult[0].result = true
+        matrizResult[0].resultName = nomePokemon
+        setresultActive(matrizResult)
       } else {
-        alert("Errou | " + nomePokemon);
+        matrizResult[0].resultActiveWindow = true
+        matrizResult[0].result = false
+        matrizResult[0].resultName = nomePokemon
+        setresultActive(matrizResult)
       }
     };
+
+    const buttonAction = (value: string) => {
+      switch (value) {
+        case "voltar":
+          onBackClick();
+          break;
+        case "continuar":
+          onContinueClick();
+          break;
+        case "restart":
+          onContinueClick();
+          break;
+        default:
+          console.log("Erro!")
+      }
+    }
 
 
     return (
       <div className={styles.poke_window_quemehpoke}>
-        {randomPokemonData.map((poke) => (
-        <button
-          key={poke.id}
-          className={styles.quemehpoke_btns}
-          onClick={() => handleButtonClick(poke.id, poke.name, poke.photo)}
-        >
-          {poke.name}
-        </button>
-      ))}
+        
+        {resultActive[0].resultActiveWindow ?
+          <ResultWindow 
+            key={resultActive[0].resultName}
+            result={resultActive[0].result}
+            resultNameWin={resultActive[0].resultName}
+            onButtonClick={buttonAction}
+           />
+          :
+          randomPokemonData.map((poke) => (
+            <button
+              key={poke.id}
+              className={styles.quemehpoke_btns}
+              onClick={() => handleButtonClick(poke.id, poke.name)}
+            >
+              {poke.name}
+            </button>
+          ))
+        }
+        
     </div>
     )
   }
