@@ -58,7 +58,6 @@ export default function Pokedex({ toggleView }: PokedexProps ) {
                     <div className={styles.window_buttons}>
                       <button type='button' onClick={toggleView}>Ver Pokémons</button>
                       <button type='button' onClick={handleClickPoke}>Quem é esse Pokémon ?</button>
-                      <button type='button'>Créditos</button>
                     </div>
                   )}
 
