@@ -197,6 +197,39 @@
 	background-color: blue;
 }
 
+.popover_trigger {
+	background-color: transparent;
+	border: none;
+}
+
+.popover_content {
+	background-color: #3d3d3d;
+	color: #fff;
+	padding: 20px;
+	border: 2px solid #fff;
+	border-radius: 10px;
+	width: 280px;
+	height: 250px;
+}
+
+.popover_details_measures {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.popover_details_stats > div {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+}
+
+.popover_arrow {
+	fill: #fff;
+}
+
 @media screen and (min-width: 380px) {
 	.pokemons {
 			grid-template-columns: 1fr 1fr;
