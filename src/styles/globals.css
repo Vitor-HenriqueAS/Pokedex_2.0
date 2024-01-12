@@ -50,19 +50,17 @@ footer a:hover {
   letter-spacing: 1px;
 }
 
-.screen__width__message {
-  display: none;
+
+@media (max-width: 1251px) {
+  main {
+    align-items: flex-start;
+    padding: 0 80px;
+  }
 }
 
-@media (max-width: 1270px) {
-
+@media (max-width: 830px) {
   main {
-    display: none;
-  }
-
-  .screen__width__message {
-    display: block;
-    text-align: center;
-    margin-top: 50px;
+    align-items: center;
+    padding: 0 40px;
   }
 }

@@ -308,3 +308,49 @@
 .arrow:hover {
   background-color: #3d3d3d;
 }
+
+@media (max-width: 1000px){
+  .poke_body {
+    width: 400px;
+  }
+
+  .poke_container {
+    width: 720px;
+  }
+
+  .poke_content, .poke_cover {
+    min-width: 360px;
+  }
+
+  .poke_cover:hover .cover_yellow_arrow,
+  .poke_cover:hover .poke_open_txt {
+    width: 310px;
+  }
+}
+
+@media (max-width: 830px){
+  .poke_container {
+    width: 360px;
+    height: 75%;
+  }
+
+  .poke_content, .poke_cover {
+    height: 100%;
+  }
+
+  .poke_cover_active {
+    transform: translate(-100%, 100%);
+  }
+}
+
+@media (max-width: 768px){
+  .cover_yellow_arrow, .poke_open_txt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 310px;
+    height: 35px;
+    border: 3px solid rgb(212, 255, 0);
+    opacity: 1;
+  }
+}

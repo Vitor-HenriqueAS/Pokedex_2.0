@@ -24,3 +24,9 @@
 .quemehpoke_btns:hover {
   background-color: blue;
 }
+
+@media (max-width: 1000px){
+  .poke_window_quemehpoke {
+    width: 355px;
+  }
+}

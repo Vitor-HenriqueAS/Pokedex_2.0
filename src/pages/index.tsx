@@ -37,10 +37,6 @@ export default function Home() {
         &copy; 2023 | Vitor-Henriqueas
         </a>
       </footer>
-
-      <div className='screen__width__message'>
-        <h2>Infelizmente não foi desenvolvido para este tamanho de tela :/</h2>
-      </div>
     </>
   )
 }
