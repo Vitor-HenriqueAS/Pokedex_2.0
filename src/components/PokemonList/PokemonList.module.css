@@ -38,12 +38,13 @@
 
 .content {
   width: 100%;
-  padding: 1rem 10rem;
+  padding: 1rem 8rem 1rem 10rem;
 }
 
 .pokemons {
-	display: grid;
-	grid-template-columns: 1fr;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -124,9 +125,11 @@
 /* ==== CARD ==== */
 
 .pokemon {
+	width: 220px;
+	height: 150px;
 	display: flex;
 	flex-direction: column;
-	margin: .5rem;
+	margin: .45rem;
 	padding: 1rem;
 	border-radius: 1rem;
 	cursor: pointer;
@@ -230,20 +233,21 @@
 	fill: #fff;
 }
 
-@media screen and (min-width: 380px) {
-	.pokemons {
-			grid-template-columns: 1fr 1fr;
+@media (max-width: 1251px) {
+	.content {
+		width: 100%;
+		padding: 0;
+	}
+
+	.pokemon_generations{
+		margin-top: 10px;
 	}
 }
 
-@media screen and (min-width: 576px) {
-	.pokemons {
-			grid-template-columns: 1fr 1fr 1fr;
-	}
-}
-
-@media screen and (min-width: 1100px) {
-	.pokemons {
-			grid-template-columns: 1fr 1fr 1fr 1fr;
+@media (max-width: 1200px) {
+	.pokemon_generations{
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		gap: 10px;
 	}
 }
