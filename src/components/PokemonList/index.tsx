@@ -12,6 +12,7 @@ type PokemonListProps = {
   toggleView: () => void;
 };
 
+// Componente para exibir a lista de Pokémon
 const PokemonList: React.FC<PokemonListProps> = ({ toggleView }) => {
   const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [offset, setOffset] = useState(0);
@@ -21,8 +22,10 @@ const PokemonList: React.FC<PokemonListProps> = ({ toggleView }) => {
   const [initialCheckedIndex, setInitialCheckedIndex] = useState<number>(0);
 
   useEffect(() => {
+    // Evita a recarga desnecessária dos dados
     if (isLoaded) return;
 
+    // Carrega os Pokémon com base no offset e no limite
     const loadPokemonItems = async () => {
       const pokemonPromises: Promise<Pokemon>[] = [];
       const newOffset = offset + pokemonList.length;
@@ -49,6 +52,7 @@ const PokemonList: React.FC<PokemonListProps> = ({ toggleView }) => {
     loadPokemonItems();
   }, [offset, limit, isLoaded, pokemonList]);
 
+  // Manipula a mudança de geração
   const handleGenerationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedGeneration = event.target.value;
     setPokemonList([]);
@@ -92,6 +96,7 @@ const PokemonList: React.FC<PokemonListProps> = ({ toggleView }) => {
     setInitialCheckedIndex(generations.findIndex((generation) => generation === selectedGeneration));
   };
 
+  // Função para exibir mais Pokémon na lista
   function showMorePokemon() {
     setIsLoaded(false);
     if(missing > 0) {

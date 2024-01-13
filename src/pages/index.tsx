@@ -24,6 +24,7 @@ export default function Home() {
       </header>
       <main>
 
+      {/* Muda da Pokedex para a Lista de Pokemons */}
       {showPokedex ? (
           <Pokedex toggleView={toggleView} />
         ) : (

@@ -21,15 +21,18 @@ export default function Pokedex({ toggleView }: PokedexProps ) {
     loadData();
   }, []);
 
+  // Alterna entre abrir/fechar a Pokédex
   const handleClick = () => {
     setPokedexOpen(!isPokedexOpen);
   };
 
+  // Manipula o clique no botão "Quem é esse Pokémon?"
   const handleClickPoke = () => {
     setShowPokemonWindow(!showPokemonWindow);
     setRandomPokemonId(getRandomPokemonId());
   };
 
+  // Manipula o clique no botão de continuar
   const handleContinue = () => {
     setIsLoading(true);
     setRandomPokemonId(getRandomPokemonId());
